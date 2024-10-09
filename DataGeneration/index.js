@@ -8,19 +8,24 @@ const generateUsers = (num) => {
     const users = [];
     for (let i = 0; i < num; i++) {
         const password = bcrypt.hashSync(faker.internet.password(), 10);
+        // Generate a designation from "Designation 1" to "Designation 10"
+        const designationNumber = Math.floor(Math.random() * 10) + 1;
+        const designation = `Designation ${designationNumber}`;
+        
         users.push({
             userId: i + 1,
             userName: faker.name.fullName(),
             email: faker.internet.email(),
             password: password,
             role: Math.random() > 0.99 ? 'Admin' : 'Employee',
-            designation: faker.name.jobTitle(),
+            designation: designation, // Use the generated designation
             gender: Math.random() > 0.5 ? 'Male' : 'Female',
             joinDate: faker.date.past().toISOString().split('T')[0],
         });
     }
     return users;
 };
+
 
 // Function to generate trainings
 const generateTrainings = (num) => {
@@ -75,21 +80,21 @@ const generateOrganisationReviews = (num, users, trainings) => {
 // Main function to orchestrate the data generation and CSV creation
 const main = () => {
     const users = generateUsers(300);
-    const trainings = generateTrainings(100);
-    const responses = generateResponses(10000, users, trainings);
-    const organisationReviews = generateOrganisationReviews(10000, users, trainings);
+    // const trainings = generateTrainings(100);
+    // const responses = generateResponses(10000, users, trainings);
+    // const organisationReviews = generateOrganisationReviews(10000, users, trainings);
 
     // Convert data to CSV format
     const usersCsv = new Parser().parse(users);
-    const trainingsCsv = new Parser().parse(trainings);
-    const responsesCsv = new Parser().parse(responses);
-    const reviewsCsv = new Parser().parse(organisationReviews);
+    // const trainingsCsv = new Parser().parse(trainings);
+    // const responsesCsv = new Parser().parse(responses);
+    // const reviewsCsv = new Parser().parse(organisationReviews);
 
     // Write CSV files to the filesystem
     fs.writeFileSync('users.csv', usersCsv);
-    fs.writeFileSync('trainings.csv', trainingsCsv);
-    fs.writeFileSync('responses.csv', responsesCsv);
-    fs.writeFileSync('organisationReviews.csv', reviewsCsv);
+    // fs.writeFileSync('trainings.csv', trainingsCsv);
+    // fs.writeFileSync('responses.csv', responsesCsv);
+    // fs.writeFileSync('organisationReviews.csv', reviewsCsv);
 };
 
 // Run the main function
